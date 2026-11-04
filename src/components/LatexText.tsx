@@ -1,0 +1,2 @@
+import katex from 'katex';
+export function LatexText({text}:{text:string}){return <>{text.split(/(\$\$[\s\S]+?\$\$|\$[^$\n]+?\$)/g).map((part,i)=>{if(part.startsWith('$')){const display=part.startsWith('$$'); const formula=part.slice(display?2:1,display?-2:-1); return <span key={i} dangerouslySetInnerHTML={{__html:katex.renderToString(formula,{displayMode:display,throwOnError:false,trust:false})}}/>;} return <span key={i}>{part}</span>;})}</>;}
