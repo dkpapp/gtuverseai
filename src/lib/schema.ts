@@ -1,0 +1,10 @@
+import { z } from 'zod';
+export const OptionId = z.enum(['A','B','C','D']);
+export const MCQOptionSchema = z.object({id: OptionId, text: z.string().min(1)});
+export const GeneratedMCQSchema = z.object({bloom_level:z.enum(['Recall','Understand','Apply','Analyze','Evaluate']),difficulty:z.enum(['Easy','Medium','Hard']),stem:z.string().min(15),options:z.array(MCQOptionSchema).length(4).refine(o => new Set(o.map(x=>x.id)).size===4),correct_option_id:OptionId,explanation:z.string().min(20),source_quote:z.string().min(10),source_chunk_id:z.string().min(1)});
+export const QuizGenerationResultSchema = z.object({quiz_title:z.string().min(5),questions:z.array(GeneratedMCQSchema).min(1)});
+export const VerificationResultSchema = z.object({reviews:z.array(z.object({question_index:z.number().int().nonnegative(),is_valid_and_unambiguous:z.boolean(),corrected_option_id:OptionId,improved_stem:z.string().optional(),improved_explanation:z.string().optional()}))});
+export const UploadConfigSchema = z.object({questionCount:z.coerce.number().int().min(5).max(30),difficulty:z.enum(['Easy','Medium','Hard','Mixed']),mode:z.enum(['PRACTICE','EXAM']),topicFocus:z.string().max(500).optional()});
+export const AttemptSchema = z.object({answers:z.record(z.string(),OptionId),timeTakenSeconds:z.number().int().min(0).max(86400)});
+export const RemediateSchema = z.object({attemptId:z.string().min(1),questionCount:z.number().int().min(5).max(30).optional()});
+export type Question = z.infer<typeof GeneratedMCQSchema>;

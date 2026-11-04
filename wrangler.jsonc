@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "gtuverse",
+  "main": "worker.ts",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "routes": [{"pattern": "gtuverse.com", "custom_domain": true}, {"pattern": "www.gtuverse.com", "custom_domain": true}],
+  "assets": {"directory": ".open-next/assets", "binding": "ASSETS"},
+  "services": [{"binding": "WORKER_SELF_REFERENCE", "service": "gtuverse"}],
+  "ai": {"binding": "AI"},
+  "d1_databases": [{"binding": "DB", "database_name": "gtuverse-db", "database_id": "00000000-0000-0000-0000-000000000000", "migrations_dir": "migrations"}],
+  "r2_buckets": [{"binding": "MATERIALS_BUCKET", "bucket_name": "gtuverse-materials"}],
+  "vectorize": [{"binding": "VECTOR_INDEX", "index_name": "gtuverse-index"}],
+  "workflows": [{"name": "quiz-generation-workflow", "binding": "QUIZ_WORKFLOW", "class_name": "QuizGenerationWorkflow"}],
+  "vars": {"AI_GATEWAY_ID": "gtuverse-ai-gateway", "MAX_UPLOAD_MB": "25"}
+}
